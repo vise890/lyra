@@ -1,13 +1,64 @@
-# About lyra
+Lyra is my take on blogging engines.
 
-Lyra is super simple. It's got 3 commands:
+> I am not lazy. It's just a Zen thing.
 
-```
-$ lyra init -- start a blog in the current dir
-$ lyra publish -- publish the blog to the git remote you specified
-$ lyra server -- start a development server to preview changes
+None of this would have been possible without [Harp](http://harpjs.com/), of
+course (hence the name lyra).
+
+
+# Getting started
+
+```bash
+$ npm install -g lyra
+$ mkdir ma-blog
+$ cd ma-blog
+$ lyra init -p https://github.com/ma-username/ma-username.github.io.git # for publishing to GH pages
+$ lyra publish
 ```
 
-```javascript
-console.log("....aand it has syntax highlighting out of the box!");
+That's it, you now have a minimal blog setup on GH pages.
+
+**NOTE**: the url you give to the `p` (or `publishing-url`) option can be any
+git repo you can push to and that would run a webserver out of its working
+copy. GH is the easiest setup.
+
+
+# Testing
+
+```bash
+$ mocha
 ```
+
+Or, for a quick and dirty run:
+
+```bash
+$ scripts/make_test
+$ cd /tmp/lyra
+$ tree
+.
+├── blog                # the blog folder, with templates copied
+│   ├── 404.jade
+│   ├── _layout.jade
+│   ├── about_lyra.md
+│   ├── index.jade
+│   └── main.styl
+├── clear_test          # script, in case you wanna nuke the folders
+└── published           # bare git repo, with the up to date, compiled blog pushed to it
+    ├── HEAD
+    ├── config
+    ├── description
+    ├── hooks
+    ├── info
+    ├── objects
+    └── refsk
+```
+
+
+# Todo
+
+- to my great dismay, keeping a .gitignored git repo inside another makes weird things happen.
+  - fix this. people will want to keep the uncompiled blog posts under a VCS
+- should probably abort with a helpful message when run outside of a lyra blog/repo/thing
+- add support for mercurial (customer wiki)
+- ftp, rsync, all the things
+
