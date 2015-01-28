@@ -12,7 +12,10 @@ $ npm install -g lyra
 $ mkdir ma-blog
 $ cd ma-blog
 $ lyra init -p https://github.com/ma-username/ma-username.github.io.git # for publishing to GH pages
+$ lyra publish
 ```
+
+That's it, you now have a minimal blog setup on GH pages.
 
 **NOTE**: the url you give to the `p` (or `publishing-url`) option can be any
 git repo you can push to and that would run a webserver out of its working
@@ -48,4 +51,8 @@ $ tree
     └── refsk
 ```
 
+# Todo
+
+- add support for mercurial (customer wiki)
+- ftp, rsync, all the things
 
