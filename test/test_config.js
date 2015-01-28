@@ -1,4 +1,5 @@
 /* @flow */
+
 var path = require('path');
 var sh = require('shelljs');
 
