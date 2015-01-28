@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-/* @flow */
-
 require('./prerequisites').check();
 
 var sh = require('shelljs');

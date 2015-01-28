@@ -1,5 +1,3 @@
-/* @flow */
-
 /*global describe: false, it: false, before: false, after: false */
 var assert = require('chai').assert;
 var _ = require('lodash');

@@ -1,4 +1,3 @@
-/* @flow */
 require('../src/prerequisites').check();
 
 var sh = require('shelljs');
