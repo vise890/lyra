@@ -5,33 +5,47 @@ Lyra is my take on blogging engines.
 None of this would have been possible without [Harp](http://harpjs.com/), of
 course (hence the name lyra).
 
-# Pseudocode
+# Installing
 
-<<<<<<< HEAD
+```bash
+$ npm install -g lyra
+$ mkdir ma-blog
+$ cd ma-blog
+$ lyra init -p https://github.com/ma-username/ma-username.github.io.git # for publishing to GH pages
 ```
-- lyra init --publish-to=https://github.com/lyra/is_awesome
-  - $published = @--publish-to
-=======
-```batch
-- lyra init
->>>>>>> 0.1
-  - cp ./templates/* ./
-  - ask for $publishing-remote-url
-  - git init ./.compiled
-  - with cwd=./.compiled
-    - git remote add publishing $publishing-remote-url
-    - touch .delete_me
-    - git add .
-    - git commit -m "initial commit"
-    - git push --set-upstream $publishing-remote-url master
-- lyra publish
-  - harp compile .compiled ./
-  - with cwd=./.compiled
-    - git add .
-    - git commit -m "update blog"
-    - git push
-- lyra server
-  - harp server
+
+**NOTE**: the url you give to the `p` (or `publishing-url`) option can be any
+git repo you can push to and that would run a webserver out of its working
+copy. GH is the easiest setup.
+
+# Testing
+
+```bash
+$ mocha
+```
+
+Or, for a quick and dirty run:
+
+```bash
+$ scripts/make_test
+$ cd /tmp/lyra
+$ tree
+.
+├── blog                # the blog folder, with templates copied
+│   ├── 404.jade
+│   ├── _layout.jade
+│   ├── about_lyra.md
+│   ├── index.jade
+│   └── main.styl
+├── clear_test          # script, in case you wanna nuke the folders
+└── published           # bare git repo, with the up to date, compiled blog pushed to it
+    ├── HEAD
+    ├── config
+    ├── description
+    ├── hooks
+    ├── info
+    ├── objects
+    └── refsk
 ```
 
 
