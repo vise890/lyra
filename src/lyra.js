@@ -46,7 +46,7 @@ var lyra = {
   },
 
   server: function(){
-    console.log('==> Starting Harp server'.green);
+    console.log('==> Starting up local server'.green);
     sh.exec('harp server');
   },
 
