@@ -5,7 +5,8 @@ Lyra is my take on blogging engines.
 None of this would have been possible without [Harp](http://harpjs.com/), of
 course (hence the name lyra).
 
-# Installing
+
+# Getting started
 
 ```bash
 $ npm install -g lyra
@@ -20,6 +21,7 @@ That's it, you now have a minimal blog setup on GH pages.
 **NOTE**: the url you give to the `p` (or `publishing-url`) option can be any
 git repo you can push to and that would run a webserver out of its working
 copy. GH is the easiest setup.
+
 
 # Testing
 
@@ -50,6 +52,7 @@ $ tree
     ├── objects
     └── refsk
 ```
+
 
 # Todo
 
