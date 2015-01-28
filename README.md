@@ -55,6 +55,7 @@ $ tree
 
 - to my great dismay, keeping a .gitignored git repo inside another makes weird things happen.
   - fix this. people will want to keep the uncompiled blog posts under a VCS
+- should probably abort with a helpful message when run outside of a lyra blog/repo/thing
 - add support for mercurial (customer wiki)
 - ftp, rsync, all the things
 
