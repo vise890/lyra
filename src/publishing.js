@@ -38,15 +38,20 @@ module.exports = {
 
       command = 'git push ' + __git_publishing_remote_name + ' master';
       sh.echo("-> " + command);
-      var err = sh.exec(command).code;
-      if (err !== 0) {
-        // FIXME: put output after the red arrow
-        sh.echo(('==> Could not push to remote `' +
-          __git_publishing_remote_name + '`. Aborting.').red);
+      sh.exec(command, {async:false}, function(code, output) {
 
-        sh.echo('Command used: ' + command);
-        sh.exit(1);
-      }
+        if (code !== 0) {
+          sh.echo(('==> Could not push to remote `' +
+            __git_publishing_remote_name + '`. Aborting.').red);
+          sh.echo('Command used: ' + command);
+          sh.echo('Command output: ' + output);
+          sh.exit(1);
+        }
+
+        sh.echo(output);
+
+      });
+
     });
   }
 
