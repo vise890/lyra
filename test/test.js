@@ -8,7 +8,7 @@ var sh = require('shelljs');
 
 var path = require('path');
 
-var setup = require('./setup');
+var test_setup = require('./setup');
 var config = require('./test_config');
 
 var lyra = require('../src/lyra');
@@ -16,19 +16,11 @@ var utils = require('../src/utils');
 
 describe('lyra', function() {
 
-  var dummy_templates = ["a.txt", "b.md", "c.md"];
-  var dummy_content = 'Lorem ipsum whatevs';
 
   before(function() {
-    setup.setup(config.paths);
-    _.forEach(dummy_templates, function(t) {
-      var t_path = path.join(config.paths.templates, t);
-      dummy_content.to(t_path);
-    });
-  });
 
-  after(function() {
-    setup.tear_down(config.paths);
+    test_setup.prepare(config.paths);
+
   });
 
   describe('#init()', function() {
@@ -40,7 +32,7 @@ describe('lyra', function() {
 
     it('copies the templates in the blog directory', function() {
       var copied_templates = sh.ls(config.paths.blog);
-      _.forEach(dummy_templates, function(t) {
+      _.forEach(test_setup.dummy_templates, function(t) {
         assert(_.includes(copied_templates, t));
       });
     });
@@ -59,6 +51,7 @@ describe('lyra', function() {
         var command = 'git remote show';
         var output = sh.exec(command).output;
         // FIXME: this test is based on the hardcoded 'publishing' name
+        // probably store in config?
         assert(_.includes(output, 'publishing'));
       });
     });
@@ -76,9 +69,22 @@ describe('lyra', function() {
         var compiled_files = sh.ls();
         _.forEach(compiled_files, function(cf) {
           var content = sh.cat(cf);
-          assert(_.includes(content, dummy_content));
+          assert(_.includes(content, test_setup.dummy_content));
         });
       });
+    });
+
+    it('adds and commits the compiled blog posts in the compiled_blog path', function() {
+
+      utils.with_cwd(config.paths.compiled_blog, function() {
+
+        sh.exec('git status', {async:false}, function(code, output) {
+          assert.equal(code, 0);
+          assert(_.includes(output, 'nothing to commit, working directory clean'));
+        });
+
+      });
+
     });
 
     it('pushes the compiled posts to the publishing remote', function() {
