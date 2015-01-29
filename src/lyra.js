@@ -46,7 +46,7 @@ var lyra = {
       sh.exit(1);
     }
 
-    sh.echo('==> Pubilshing compiled blog on remote URL'.green);
+    sh.echo('==> Publishing compiled blog on remote URL'.green);
     publishing.push(config.paths.compiled_blog);
 
     sh.echo('==> Done.'.green);
