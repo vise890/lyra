@@ -11,22 +11,26 @@ blog_dir=$test_dir/blog
 published_dir=$test_dir/published
 
 cd $test_dir
+
+# clean up test dir
 cp "$lyra_root_dir/scripts/clear_test" $test_dir
 ./clear_test
 
-
+# make the required dirs
 mkdir -p $blog_dir $published_dir
+
+# prepare "remote" repo
 git init --bare $published_dir
 
+# init the magic
 cd $blog_dir
+lyra init -p $published_dir # set publishing url to "remote" repo
 
-lyra init -p $published_dir
-
+# publish the blog
 lyra publish
 
+# return control to the tester, the thing is now ready to go
 cd $test_dir
-
 echo "==> Feel free to explore"
 ls
-
 echo "--> cd $(pwd)"
