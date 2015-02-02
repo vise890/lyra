@@ -1,1 +1,2 @@
-(A) ಠ_ಠ common root. 2 folders: www blog
+x (A) ಠ_ಠ common root. 2 folders: www blog
+(A) replace all shelljs.exec calls
