@@ -4,24 +4,29 @@ var sh = require('shelljs');
 var tmp = sh.tempdir();
 
 var test_path = path.join(tmp, 'lyra');
-var lyra_root = path.resolve(__dirname, '..');
+var lyra_js_root = path.resolve(__dirname, '..');
 
 module.exports = {
 
   paths: {
-    blog: path.join(test_path, 'blog'),
 
-    compiled_blog: path.join(test_path, 'compiled_blog'),
+    blog: {
+      root: path.join(test_path, 'blog'),
+      src: path.join(test_path, 'blog', 'src'),
+      compiled: path.join(test_path, 'blog', 'compiled')
+    },
 
     publishing_url: path.join(test_path, 'publishing_url'),
 
-    templates: path.resolve(test_path, 'templates'),
+    lyra_js: {
 
-    test_path: test_path,
+      root: lyra_js_root,
+      templates: path.resolve(test_path, 'templates'),
+    },
 
-    lyra_root: lyra_root,
+    harp_bin: path.join(lyra_js_root, "node_modules", "harp", "bin", "harp"),
 
-    harp_bin: path.join(lyra_root, "node_modules", "harp", "bin", "harp")
+    test_path: test_path
   }
 
 };

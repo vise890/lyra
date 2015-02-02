@@ -15,16 +15,17 @@ var lyra = {
   init: function(config) {
 
     sh.echo('==> Copying templates'.green);
-    sh.cp(config.paths.templates + '/*', config.paths.blog);
+    sh.mkdir(config.paths.blog.src);
+    sh.cp(config.paths.lyra_js.templates + '/*', config.paths.blog.src);
 
     sh.echo('==> Setting up local copy of compiled blog'.green);
-    sh.mkdir(config.paths.compiled_blog);
+    sh.mkdir(config.paths.blog.compiled);
 
     sh.echo(
       '==> Configuring Lyra for publishing local compiled blog to remote URL'
       .green
     );
-    publishing.init(config.paths.compiled_blog, config.paths.publishing_url);
+    publishing.init(config.paths.blog.compiled, config.paths.publishing_url);
 
     sh.echo('==> Done.'.green);
   },
@@ -35,9 +36,9 @@ var lyra = {
     // FIXME: extract this harp sheit into a module
     var command = config.paths.harp_bin +
       ' compile --output=' +
-      config.paths.compiled_blog +
+      config.paths.blog.compiled +
       ' ' +
-      config.paths.blog;
+      config.paths.blog.src;
 
     var err = sh.exec(command).code;
     if (err !== 0) {
@@ -47,13 +48,13 @@ var lyra = {
     }
 
     sh.echo('==> Publishing compiled blog on remote URL'.green);
-    publishing.push(config.paths.compiled_blog);
+    publishing.push(config.paths.blog.compiled);
 
     sh.echo('==> Done.'.green);
   },
 
   server: function() {
-    console.log('==> Starting up local server'.green);
+    sh.echo('==> Starting up local server'.green);
     sh.exec('harp server');
   },
 

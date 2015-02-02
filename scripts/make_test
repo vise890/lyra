@@ -10,6 +10,8 @@ test_dir=/tmp/lyra
 blog_dir=$test_dir/blog
 published_dir=$test_dir/published
 
+rm -rf $test_dir
+mkdir $test_dir
 cd $test_dir
 
 # clean up test dir

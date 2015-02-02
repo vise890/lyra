@@ -1,18 +1,49 @@
 var path = require('path');
+var fs = require('fs');
 
-var lyra_root = path.resolve(__dirname, '..');
+var colors = require('colors');
+var sh = require('shelljs');
+
+var lyra_js_root = path.resolve(__dirname, '..');
+
+var blog_src_dirname = 'src';
+var blog_compiled_dirname = 'compiled';
+
+function is_blog_root(path) {
+  var contents = fs.readdirSync(path);
+  return (contents.length === 0 ||
+          ((contents.indexOf(blog_src_dirname) !== -1) &&
+           (contents.indexOf(blog_compiled_dirname) !== -1)));
+}
+
+var cwd = process.cwd();
+var blog_root;
+if (is_blog_root(cwd)) {
+  blog_root = cwd;
+} else {
+  blog_root = path.join(cwd, '..');
+  if (!is_blog_root(blog_root)) {
+    sh.echo('Cannot find blog root directory'.red);
+    sh.exit(1);
+  }
+}
+
 module.exports = {
 
   paths: {
-    blog: process.cwd(),
 
-    compiled_blog: path.resolve(process.cwd(), '.compiled'),
+    blog: {
+      root: blog_root,
+      src: path.join(blog_root, blog_src_dirname),
+      compiled: path.join(blog_root, blog_compiled_dirname)
+    },
 
-    templates: path.join(lyra_root, 'templates'),
+    lyra_js: {
+      root: lyra_js_root,
+      templates: path.join(lyra_js_root, 'templates'),
+    },
 
-    lyra_root: lyra_root,
-
-    harp_bin: path.join(lyra_root, "node_modules", "harp", "bin", "harp")
+    harp_bin: path.join(lyra_js_root, "node_modules", "harp", "bin", "harp")
   }
 
 };
