@@ -12,7 +12,10 @@ course (hence the name lyra).
 $ npm install -g lyra
 $ mkdir ma-blog
 $ cd ma-blog
-$ lyra init -p https://github.com/ma-username/ma-username.github.io.git # for publishing to GH pages
+
+# for publishing to GH pages
+$ lyra init -p https://github.com/ma-username/ma-username.github.io.git
+
 $ lyra publish
 ```
 
@@ -34,30 +37,31 @@ Or, for a quick and dirty run:
 ```bash
 $ scripts/make_test
 $ cd /tmp/lyra
-$ tree
+$ tree -L 3
 .
-├── blog                # the blog folder, with templates copied
-│   ├── 404.jade
-│   ├── _layout.jade
-│   ├── about_lyra.md
-│   ├── index.jade
-│   └── main.styl
-├── clear_test          # script, in case you wanna nuke the folders
-└── published           # bare git repo, with the up to date, compiled blog pushed to it
+├── blog                      # your blog root folder
+│   ├── compiled              # compiled blog, it's what gets published
+│   │   ├── .git              # git repo with a remote set to the path of `published`
+│   │   ├── 404.html
+│   │   ├── about_lyra.html
+│   │   ├── index.html
+│   │   └── main.css
+│   └── src                   # your blog source files
+│       ├── 404.jade            # page displayed when something's not found
+│       ├── _layout.jade        # layout for *every* page
+│       ├── about_lyra.md       # sample blog post
+│       ├── index.jade          # your homepage
+│       └── main.styl           # the main style
+├── clear_test                # scripts to clear the test dirs
+└── published                 # --bare .git repo that simulates the `publishing` remote
     ├── HEAD
     ├── config
-    ├── description
-    ├── hooks
-    ├── info
-    ├── objects
-    └── refsk
+    └── [...]
 ```
 
 
 # Todo
 
-- to my great dismay, keeping a .gitignored git repo inside another makes weird things happen.
-  - fix this. people will want to keep the uncompiled blog posts under a VCS
 - should probably abort with a helpful message when run outside of a lyra blog/repo/thing
 - add support for mercurial (customer wiki)
 - ftp, rsync, all the things
