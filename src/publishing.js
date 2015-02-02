@@ -13,12 +13,13 @@ module.exports = {
       var cmd = 'git remote add ' + __git_publishing_remote_name + ' ' +
         publishing_url;
 
-      var err = sh.exec(cmd).code;
-      if (err === 128) {
+      var git_remote_add = sh.exec(cmd);
+      if (git_remote_add.code === 128) {
         sh.echo(('--> Remote publishing already set-up. Skipping.').yellow);
-      } else if (err !== 0) {
+      } else if (git_remote_add.code !== 0) {
         sh.echo('==> Could not add git remote. Aborting.'.red);
         sh.echo('Command used: ' + cmd);
+        sh.echo('Command output: ' + git_remote_add.output);
         sh.exit(1);
       }
 
@@ -38,19 +39,18 @@ module.exports = {
 
       command = 'git push ' + __git_publishing_remote_name + ' master';
       sh.echo("-> " + command);
-      sh.exec(command, {async:false}, function(code, output) {
+      var git_push = sh.exec(command);
 
-        if (code !== 0) {
+        if (git_push.code !== 0) {
           sh.echo(('==> Could not push to remote `' +
             __git_publishing_remote_name + '`. Aborting.').red);
           sh.echo('Command used: ' + command);
-          sh.echo('Command output: ' + output);
+          sh.echo('Command output: ' + command.output);
           sh.exit(1);
         }
 
-        sh.echo(output);
+        sh.echo(command.output);
 
-      });
 
     });
   }

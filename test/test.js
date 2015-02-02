@@ -78,10 +78,9 @@ describe('lyra', function() {
 
       utils.with_cwd(config.paths.compiled_blog, function() {
 
-        sh.exec('git status', {async:false}, function(code, output) {
-          assert.equal(code, 0);
-          assert(_.includes(output, 'nothing to commit, working directory clean'));
-        });
+        var git_status = sh.exec('git status');
+        assert.equal(git_status.code, 0);
+        assert(_.includes(git_status.output, 'nothing to commit, working directory clean'));
 
       });
 
