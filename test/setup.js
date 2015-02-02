@@ -20,14 +20,14 @@ module.exports = {
     destroy(paths.test_path);
 
     sh.mkdir(paths.test_path,
-             paths.blog,
-             paths.templates,
+             paths.lyra_js.templates,
+             paths.blog.root,
              paths.publishing_url);
 
     sh.exec('git init --bare '+paths.publishing_url);
 
     _.forEach(dummy_templates, function(t) {
-      var t_path = path.join(paths.templates, t);
+      var t_path = path.join(paths.lyra_js.templates, t);
       dummy_content.to(t_path);
     });
 
