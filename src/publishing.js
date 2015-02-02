@@ -41,16 +41,13 @@ module.exports = {
       sh.echo("-> " + command);
       var git_push = sh.exec(command);
 
-        if (git_push.code !== 0) {
-          sh.echo(('==> Could not push to remote `' +
-            __git_publishing_remote_name + '`. Aborting.').red);
-          sh.echo('Command used: ' + command);
-          sh.echo('Command output: ' + command.output);
-          sh.exit(1);
-        }
-
-        sh.echo(command.output);
-
+      if (git_push.code !== 0) {
+        sh.echo(('==> Could not push to remote `' +
+                 __git_publishing_remote_name + '`. Aborting.').red);
+        sh.echo('Command used: ' + command);
+        sh.echo('Command output: ' + command.output);
+        sh.exit(1);
+      }
 
     });
   }
