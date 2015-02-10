@@ -1,3 +1,4 @@
+(A) FIX: cannot find blog root from symlinked src
+(A) FIX: completely borked
 
-(A) replace all shelljs.exec calls
-(A) cannot find blog root from symlinked src
+replace all shelljs.exec calls?
