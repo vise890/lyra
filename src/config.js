@@ -23,7 +23,7 @@ if (is_blog_root(cwd)) {
 } else {
   blog_root = path.join(cwd, '..');
   if (!is_blog_root(blog_root)) {
-    sh.echo('Cannot find blog root directory'.red);
+    sh.echo('Cannot find blog root directory. It must be either an empty folder or one with src and copiled blog'.red);
     sh.exit(1);
   }
 }
