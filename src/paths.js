@@ -1,5 +1,4 @@
 var path = require('path');
-var fs = require('fs');
 
 var colors = require('colors');
 var sh = require('shelljs');
@@ -14,7 +13,7 @@ function get_blog_root(start) {
   start = start || process.cwd();
 
   function is_blog_root(path) {
-    var contents = fs.readdirSync(path);
+    var contents = sh.ls(path);
 
     var has_src = contents.indexOf(blog_src_dirname) !== -1;
     var has_compiled = contents.indexOf(blog_compiled_dirname) !== -1;
