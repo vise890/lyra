@@ -55,8 +55,4 @@ module.exports = {
     return path.join(lyra_js_root, 'templates');
   },
 
-  get_harp_bin: function() {
-    return path.join(lyra_js_root, "node_modules", "harp", "bin", "harp");
-  }
-
 };

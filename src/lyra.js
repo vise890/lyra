@@ -3,6 +3,7 @@ var colors = require('colors');
 
 var utils = require('./utils');
 var publishing = require('./publishing');
+var compiler = require('./compiler');
 
 module.exports = {
 
@@ -32,15 +33,7 @@ module.exports = {
     var compiled = paths.get_blog_compiled(blog_root);
 
     sh.echo('==> Compiling blog pages'.green);
-
-    // FIXME: extract this harp sheit into a module
-    var cmd = paths.get_harp_bin() + ' compile --output=' + compiled + ' ' + src;
-    var err = sh.exec(cmd).code;
-    if (err !== 0) {
-      sh.echo('==> Could not compile blog. Aborting.'.red);
-      sh.echo('Command used: ' + cmd);
-      sh.exit(1);
-    }
+    compiler.compile(src, compiled);
 
     sh.echo('==> Publishing blog on remote URL'.green);
     publishing.push(compiled);
