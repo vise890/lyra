@@ -2,4 +2,4 @@
 (A) FIX: completely borked
 
 replace all shelljs.exec calls?
-(A) if there is a .git repo in src it messes with the one in . WOW
+(A) if there is a .git repo in src it messes with the one in compiled. WOW
