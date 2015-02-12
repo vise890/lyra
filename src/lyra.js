@@ -12,33 +12,39 @@ var publishing = require('./publishing');
 
 var lyra = {
 
-  init: function(config) {
+  init: function(config, publishing_url) {
+
+    var blog_root = config.get_blog_root_path();
+    var src = config.get_blog_src_path(blog_root);
+    var compiled = config.get_blog_compiled_path(blog_root);
 
     sh.echo('==> Copying templates'.green);
-    sh.mkdir(config.paths.blog.src);
-    sh.cp(config.paths.lyra_js.templates + '/*', config.paths.blog.src);
+    sh.mkdir(src);
+    sh.cp(config.internal_paths.lyra_js.templates + '/*', src);
 
     sh.echo('==> Setting up local copy of compiled blog'.green);
-    sh.mkdir(config.paths.blog.compiled);
+    sh.mkdir(compiled);
 
     sh.echo(
       '==> Configuring Lyra for publishing local compiled blog to remote URL'
       .green
     );
-    publishing.init(config.paths.blog.compiled, config.paths.publishing_url);
+    publishing.init(compiled, publishing_url);
 
     sh.echo('==> Done.'.green);
   },
 
   publish: function(config) {
+
+    var blog_root = config.get_blog_root_path();
+    var src = config.get_blog_src_path(blog_root);
+    var compiled = config.get_blog_compiled_path(blog_root);
+
     sh.echo('==> Compiling blog pages'.green);
 
     // FIXME: extract this harp sheit into a module
-    var command = config.paths.harp_bin +
-      ' compile --output=' +
-      config.paths.blog.compiled +
-      ' ' +
-      config.paths.blog.src;
+    var command = config.internal_paths.harp_bin +
+      ' compile --output=' + compiled + ' ' + src;
 
     var err = sh.exec(command).code;
     if (err !== 0) {
@@ -48,7 +54,7 @@ var lyra = {
     }
 
     sh.echo('==> Publishing compiled blog on remote URL'.green);
-    publishing.push(config.paths.blog.compiled);
+    publishing.push(compiled);
 
     sh.echo('==> Done.'.green);
   },
@@ -84,8 +90,7 @@ if (require.main === module) {
         .demand('p')
         .argv;
 
-      config.paths.publishing_url = argv['publishing-url'];
-      lyra.init(config);
+      lyra.init(config, argv['publishing-url']);
       break;
     case "publish":
       lyra.publish(config);

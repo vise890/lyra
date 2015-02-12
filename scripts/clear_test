@@ -1,6 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-IFS=$'\n\t'
-
-# remove the two directories that contain the tests
-rm -rf blog published
