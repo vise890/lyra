@@ -18,17 +18,14 @@ var lyra = {
     var src = paths.get_blog_src(blog_root);
     var compiled = paths.get_blog_compiled(blog_root);
 
-    sh.echo('==> Copying templates'.green);
     sh.mkdir(src);
-    sh.cp(paths.get_templates() + '/*', src);
-
-    sh.echo('==> Setting up local copy of compiled blog'.green);
     sh.mkdir(compiled);
 
-    sh.echo(
-      '==> pathsuring Lyra for publishing local compiled blog to remote URL'
-      .green
-    );
+    sh.echo('==> Copying templates'.green);
+    sh.cp(paths.get_templates() + '/*', src);
+
+    var msg = '==> Configuring Lyra for publishing to remote URL';
+    sh.echo(msg.green);
     publishing.init(compiled, publishing_url);
 
     sh.echo('==> Done.'.green);
@@ -43,24 +40,22 @@ var lyra = {
     sh.echo('==> Compiling blog pages'.green);
 
     // FIXME: extract this harp sheit into a module
-    var command = paths.get_harp_bin() +
-      ' compile --output=' + compiled + ' ' + src;
-
-    var err = sh.exec(command).code;
+    var cmd = paths.get_harp_bin() + ' compile --output=' + compiled + ' ' + src;
+    var err = sh.exec(cmd).code;
     if (err !== 0) {
       sh.echo('==> Could not compile blog. Aborting.'.red);
-      sh.echo('Command used: ' + command);
+      sh.echo('Command used: ' + cmd);
       sh.exit(1);
     }
 
-    sh.echo('==> Publishing compiled blog on remote URL'.green);
+    sh.echo('==> Publishing blog on remote URL'.green);
     publishing.push(compiled);
 
     sh.echo('==> Done.'.green);
   },
 
   server: function() {
-    sh.echo('==> Starting up local server'.green);
+    sh.echo('==> Starting local server'.green);
     sh.exec('harp server');
   },
 
