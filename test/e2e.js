@@ -119,5 +119,7 @@ describe('lyra', function() {
         assert(_.includes(output, 'update blog'));
       });
     });
+
   });
+
 });
