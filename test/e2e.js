@@ -9,7 +9,7 @@ var sh = require('shelljs');
 var path = require('path');
 
 var lyra = require('../src/lyra');
-var config = require('../src/config');
+var paths = require('../src/paths');
 var utils = require('../src/utils');
 
 var test_blog = path.join(sh.tempdir(), 'test_lyra_blog');
@@ -30,7 +30,7 @@ describe('lyra', function() {
       sh.mkdir(test_blog);
       sh.cd(test_blog);
       var dummy_publishing_url = 'https://foo.org/blogus.git';
-      lyra.init(config, dummy_publishing_url);
+      lyra.init(paths, dummy_publishing_url);
     });
 
     afterEach(function() {
@@ -38,8 +38,8 @@ describe('lyra', function() {
     });
 
     it('copies the templates in the blog directory', function() {
-      var templates = sh.ls(config.internal_paths.lyra_js.templates);
-      var copied_templates = sh.ls(config.get_blog_src_path(test_blog));
+      var templates = sh.ls(paths.get_templates());
+      var copied_templates = sh.ls(paths.get_blog_src(test_blog));
 
       _.forEach(templates, function(t) {
         assert(_.includes(copied_templates, t));
@@ -47,7 +47,7 @@ describe('lyra', function() {
     });
 
     it('inits a git repo in the compiled blog path', function() {
-      utils.with_cwd(config.get_blog_compiled_path(test_blog), function() {
+      utils.with_cwd(paths.get_blog_compiled(test_blog), function() {
         var command = 'git status';
         var exitcode = sh.exec(command).code;
         assert.equal(exitcode, 0,
@@ -56,11 +56,11 @@ describe('lyra', function() {
     });
 
     it('sets up a remote called publishing', function() {
-      utils.with_cwd(config.get_blog_compiled_path(test_blog), function() {
+      utils.with_cwd(paths.get_blog_compiled(test_blog), function() {
         var command = 'git remote show';
         var output = sh.exec(command).output;
         // FIXME: this test is based on the hardcoded 'publishing' name
-        //        store in config?
+        //        store in paths?
         assert(_.includes(output, 'publishing'));
       });
     });
@@ -79,9 +79,9 @@ describe('lyra', function() {
 
       sh.exec('git init --bare ' + test_publishing);
 
-      lyra.init(config, test_publishing);
+      lyra.init(paths, test_publishing);
 
-      lyra.publish(config);
+      lyra.publish(paths);
       // FIXME: capture stdout when lyra runs (quiet down test output)
     });
 
@@ -90,7 +90,7 @@ describe('lyra', function() {
     });
 
     it('compiles the blog posts into the compiled blog path', function() {
-      utils.with_cwd(config.get_blog_compiled_path(test_blog), function() {
+      utils.with_cwd(paths.get_blog_compiled(test_blog), function() {
         var compiled_files = sh.ls();
         _.forEach(compiled_files, function(cf) {
           var content = sh.cat(cf);
@@ -101,7 +101,7 @@ describe('lyra', function() {
 
     it('adds and commits the compiled blog posts in the compiled blog path', function() {
 
-      utils.with_cwd(config.get_blog_compiled_path(test_blog), function() {
+      utils.with_cwd(paths.get_blog_compiled(test_blog), function() {
 
         var git_status = sh.exec('git status');
         assert.equal(git_status.code, 0);

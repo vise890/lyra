@@ -12,21 +12,21 @@ var publishing = require('./publishing');
 
 var lyra = {
 
-  init: function(config, publishing_url) {
+  init: function(paths, publishing_url) {
 
-    var blog_root = config.get_blog_root_path();
-    var src = config.get_blog_src_path(blog_root);
-    var compiled = config.get_blog_compiled_path(blog_root);
+    var blog_root = process.cwd();
+    var src = paths.get_blog_src(blog_root);
+    var compiled = paths.get_blog_compiled(blog_root);
 
     sh.echo('==> Copying templates'.green);
     sh.mkdir(src);
-    sh.cp(config.internal_paths.lyra_js.templates + '/*', src);
+    sh.cp(paths.get_templates() + '/*', src);
 
     sh.echo('==> Setting up local copy of compiled blog'.green);
     sh.mkdir(compiled);
 
     sh.echo(
-      '==> Configuring Lyra for publishing local compiled blog to remote URL'
+      '==> pathsuring Lyra for publishing local compiled blog to remote URL'
       .green
     );
     publishing.init(compiled, publishing_url);
@@ -34,16 +34,16 @@ var lyra = {
     sh.echo('==> Done.'.green);
   },
 
-  publish: function(config) {
+  publish: function(paths) {
 
-    var blog_root = config.get_blog_root_path();
-    var src = config.get_blog_src_path(blog_root);
-    var compiled = config.get_blog_compiled_path(blog_root);
+    var blog_root = paths.get_blog_root();
+    var src = paths.get_blog_src(blog_root);
+    var compiled = paths.get_blog_compiled(blog_root);
 
     sh.echo('==> Compiling blog pages'.green);
 
     // FIXME: extract this harp sheit into a module
-    var command = config.internal_paths.harp_bin +
+    var command = paths.get_harp_bin() +
       ' compile --output=' + compiled + ' ' + src;
 
     var err = sh.exec(command).code;
@@ -70,7 +70,7 @@ module.exports = lyra;
 
 if (require.main === module) {
 
-  var config = require('./config');
+  var paths = require('./paths');
 
   var lyra_usage = '==> Command not recognized\n' +
     'Lyra\'s Usage:\n' +
@@ -89,14 +89,13 @@ if (require.main === module) {
         .alias('p', 'publishing-url')
         .demand('p')
         .argv;
-
-      lyra.init(config, argv['publishing-url']);
+      lyra.init(paths, argv['publishing-url']);
       break;
     case "publish":
-      lyra.publish(config);
+      lyra.publish(paths);
       break;
     case "server":
-      lyra.server(config);
+      lyra.server(paths);
       break;
     default:
       sh.echo(lyra_usage);
