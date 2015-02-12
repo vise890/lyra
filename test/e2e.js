@@ -5,7 +5,6 @@ var _ = require('lodash');
 var sh = require('shelljs');
 
 var path = require('path');
-var fs = require('fs');
 
 var lyra = require('../src/lyra');
 var config = require('../src/config');
