@@ -29,7 +29,10 @@ function get_blog_root(start) {
   }
 
   if (!is_blog_root(blog_root)) {
-    sh.echo('Cannot find blog root directory. It must be either an empty folder or one with src and copiled blog'.red);
+    var msg = 'Cannot find blog root directory. ' +
+              'It must be either an empty folder ' +
+              'or one with src and compiled blog';
+    sh.echo(msg.red);
     sh.exit(1);
   }
 
