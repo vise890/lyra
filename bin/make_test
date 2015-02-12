@@ -1,0 +1,34 @@
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+lyra_root_dir=$(pwd)
+
+npm install -g
+
+test_dir=/tmp/lyra_test
+blog_dir=$test_dir/blog
+published_dir=$test_dir/published
+
+# make the required dirs
+rm -rf $test_dir
+mkdir -p $test_dir $blog_dir $published_dir
+
+# get in there
+cd $test_dir
+
+# prepare "remote" repo
+git init --bare $published_dir
+
+# init the magic
+cd $blog_dir
+lyra init -p $published_dir # set publishing url to "remote" repo
+
+# publish the blog
+lyra publish
+
+# return control to the tester, the thing is now ready to go
+echo "==> Feel free to explore"
+cd $test_dir
+tree -a -L 3
+echo "--> cd $(pwd)"

@@ -35,9 +35,9 @@ $ mocha
 Or, for a quick and dirty run:
 
 ```bash
-$ scripts/make_test
-$ cd /tmp/lyra
-$ tree -L 3
+$ bin/make_test
+$ cd /tmp/lyra_test
+$ tree -a -L 3
 .
 ├── blog                      # your blog root folder
 │   ├── compiled              # compiled blog, it's what gets published
@@ -52,7 +52,6 @@ $ tree -L 3
 │       ├── about_lyra.md       # sample blog post
 │       ├── index.jade          # your homepage
 │       └── main.styl           # the main style
-├── clear_test                # scripts to clear the test dirs
 └── published                 # --bare .git repo that simulates the `publishing` remote
     ├── HEAD
     ├── config
@@ -65,4 +64,3 @@ $ tree -L 3
 - should probably abort with a helpful message when run outside of a lyra blog/repo/thing
 - add support for mercurial (customer wiki)
 - ftp, rsync, all the things
-
