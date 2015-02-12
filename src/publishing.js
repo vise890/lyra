@@ -17,7 +17,6 @@ module.exports = {
       } else if (git_remote_add.code !== 0) {
         sh.echo('==> Could not add git remote. Aborting.'.red);
         sh.echo('Command used: ' + cmd);
-        sh.echo('Command output: ' + git_remote_add.output);
         sh.exit(1);
       }
 
@@ -45,7 +44,6 @@ module.exports = {
                   '`. Aborting.';
         sh.echo(msg.red);
         sh.echo('Command used: ' + cmd);
-        sh.echo('Command output: ' + cmd.output);
         sh.exit(1);
       }
 
