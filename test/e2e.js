@@ -15,14 +15,18 @@ var utils = require('../src/utils');
 var test_blog = path.join(sh.tempdir(), 'test_lyra_blog');
 var test_publishing = path.join(sh.tempdir(), 'test_lyra_publishing');
 
+function cleanup() {
+  sh.cd('/tmp'); // ensure we're not in a dir that doesn't exist
+  sh.rm('-rf', test_blog);
+  sh.rm('-rf', test_publishing);
+}
+
 describe('lyra', function() {
 
   describe('#init()', function() {
 
     beforeEach(function() {
-      // FIXME: DRY this up
-      sh.cd('/tmp');
-      sh.rm('-rf', test_blog);
+      cleanup();
       sh.mkdir(test_blog);
       sh.cd(test_blog);
       var dummy_publishing_url = 'https://foo.org/blogus.git';
@@ -30,8 +34,7 @@ describe('lyra', function() {
     });
 
     afterEach(function() {
-      // ensure we're not in a dir that doesn't exist
-      sh.cd('/tmp');
+      cleanup();
     });
 
     it('copies the templates in the blog directory', function() {
@@ -67,11 +70,7 @@ describe('lyra', function() {
   describe('#publish()', function() {
 
     beforeEach(function() {
-      // FIXME: DRY this up
-      sh.cd('/tmp');
-
-      sh.rm('-rf', test_blog);
-      sh.rm('-rf', test_publishing);
+      cleanup();
 
       sh.mkdir(test_blog);
       sh.mkdir(test_publishing);
@@ -87,8 +86,7 @@ describe('lyra', function() {
     });
 
     afterEach(function() {
-      // ensure we're not in a dir that doesn't exist
-      sh.cd('/tmp');
+      cleanup();
     });
 
     it('compiles the blog posts into the compiled blog path', function() {
