@@ -2,6 +2,8 @@
 var assert = require('chai').assert;
 var _ = require('lodash');
 
+var shelljs_config = require('shelljs').config;
+shelljs_config.quiet = true;
 var sh = require('shelljs');
 
 var path = require('path');
