@@ -3,11 +3,6 @@ var path = require('path');
 var colors = require('colors');
 var sh = require('shelljs');
 
-var lyra_js_root = path.resolve(__dirname, '..');
-
-var blog_src_dirname = 'src';
-var blog_compiled_dirname = 'compiled';
-
 function get_blog_root(start) {
 
   start = start || process.cwd();
@@ -38,6 +33,11 @@ function get_blog_root(start) {
 
   return blog_root;
 }
+
+var lyra_js_root = path.resolve(__dirname, '..');
+
+var blog_src_dirname = 'src';
+var blog_compiled_dirname = 'compiled';
 
 module.exports = {
 
