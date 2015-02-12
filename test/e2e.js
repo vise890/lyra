@@ -10,8 +10,8 @@ var lyra = require('../src/lyra');
 var config = require('../src/config');
 var utils = require('../src/utils');
 
-var test_blog = '/tmp/test_lyra_blog'; //path.join(sh.tempdir(), 'test_lyra_blog');
-var test_publishing = '/tmp/test_lyra_publishing'; //path.join(sh.tempdir(), 'test_lyra_publishing');
+var test_blog = path.join(sh.tempdir(), 'test_lyra_blog');
+var test_publishing = path.join(sh.tempdir(), 'test_lyra_publishing');
 
 describe('lyra', function() {
 
@@ -31,7 +31,7 @@ describe('lyra', function() {
       // ensure we're not in a dir that doesn't exist
       sh.cd('/tmp');
     });
- 
+
     it('copies the templates in the blog directory', function() {
       var templates = sh.ls(config.internal_paths.lyra_js.templates);
       var copied_templates = sh.ls(config.get_blog_src_path(test_blog));
