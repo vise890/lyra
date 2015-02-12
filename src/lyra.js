@@ -1,16 +1,10 @@
-#!/usr/bin/env node
-
-require('./prerequisites').check();
-
 var sh = require('shelljs');
 var colors = require('colors');
-
-var path = require('path');
 
 var utils = require('./utils');
 var publishing = require('./publishing');
 
-var lyra = {
+module.exports = {
 
   init: function(paths, publishing_url) {
 
@@ -60,40 +54,3 @@ var lyra = {
   },
 
 };
-
-module.exports = lyra;
-
-if (require.main === module) {
-
-  var paths = require('./paths');
-
-  var lyra_usage = '==> Command not recognized\n' +
-    'Lyra\'s Usage:\n' +
-    '$ lyra init      # init a blog in the current directory\n' +
-    '$ lyra publish   # publish the blog to the provided remote\n' +
-    '$ lyra server    # start a local development server\n';
-
-  var lyra_command = process.argv[2];
-  switch (lyra_command) {
-    case "init":
-      var argv = require('yargs')
-        .describe('p',
-          'The url of a git repo where you want to publish your blog')
-        .example('$0 -p https://github.com/vise890/vise890.github.io.git',
-          'Publishing on github pages')
-        .alias('p', 'publishing-url')
-        .demand('p')
-        .argv;
-      lyra.init(paths, argv['publishing-url']);
-      break;
-    case "publish":
-      lyra.publish(paths);
-      break;
-    case "server":
-      lyra.server(paths);
-      break;
-    default:
-      sh.echo(lyra_usage);
-  }
-
-}

@@ -10,7 +10,7 @@
     "blog"
   ],
   "bin": {
-    "lyra": "./src/lyra.js"
+    "lyra": "./bin/lyra"
   },
   "author": "Martino Visintin",
   "license": "MIT",
