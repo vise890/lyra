@@ -28,7 +28,7 @@ module.exports = {
 
   publish: function(paths) {
 
-    var blog_root = paths.get_blog_root();
+    var blog_root = paths.get_blog_root(process.cwd());
     var src = paths.get_blog_src(blog_root);
     var compiled = paths.get_blog_compiled(blog_root);
 

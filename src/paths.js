@@ -1,11 +1,13 @@
 var path = require('path');
+var _ = require('lodash');
 
 var colors = require('colors');
 var sh = require('shelljs');
 
 function get_blog_root(start) {
-
-  start = start || process.cwd();
+  if(_.isUndefined(start) || _.isNull(start)) {
+    throw new Error('No. Use me like this: get_blog_root("/some/path")');
+  }
 
   function is_blog_root(path) {
     var contents = sh.ls(path);

@@ -99,7 +99,7 @@ describe('lyra', function() {
       });
     });
 
-    it('adds and commits the compiled blog posts in the compiled blog path', function() {
+    it('adds and commits everything in the compiled blog path', function() {
 
       utils.with_cwd(paths.get_blog_compiled(test_blog), function() {
 
