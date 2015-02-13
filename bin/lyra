@@ -26,8 +26,6 @@ var lyra_cli = {
 
 };
 
-
-
 var lyra_command_name = process.argv[2];
 var lyra_command = lyra_cli[lyra_command_name];
 if (lyra_command === undefined) {
