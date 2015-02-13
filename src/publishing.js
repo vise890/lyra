@@ -19,7 +19,6 @@ module.exports = {
         sh.echo('Command used: ' + cmd);
         sh.exit(1);
       }
-
     });
   },
 
@@ -46,7 +45,6 @@ module.exports = {
         sh.echo('Command used: ' + cmd);
         sh.exit(1);
       }
-
     });
   }
 
