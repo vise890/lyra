@@ -21,6 +21,13 @@ function cleanup() {
   sh.rm('-rf', test_publishing);
 }
 
+var silence_stdout = function(f) {
+  var old_write = process.stdout.write;
+  process.stdout.write = function(){};
+  f();
+  process.stdout.write = old_write;
+};
+
 describe('lyra', function() {
 
   describe('#init()', function() {
@@ -30,7 +37,9 @@ describe('lyra', function() {
       sh.mkdir(test_blog);
       sh.cd(test_blog);
       var dummy_publishing_url = 'https://foo.org/blogus.git';
-      lyra.init(paths, dummy_publishing_url);
+      silence_stdout(function() {
+        lyra.init(paths, dummy_publishing_url);
+      });
     });
 
     afterEach(function() {
@@ -49,18 +58,21 @@ describe('lyra', function() {
     it('inits a git repo in the compiled blog path', function() {
       utils.with_cwd(paths.get_blog_compiled(test_blog), function() {
         var command = 'git status';
-        var exitcode = sh.exec(command).code;
-        assert.equal(exitcode, 0,
-                     'git status exits normally (exitcode=0)');
+        var exitcode;
+        silence_stdout(function() {
+          exitcode = sh.exec(command).code;
+        });
+        assert.equal(exitcode, 0, 'git status exits normally (exitcode=0)');
       });
     });
 
     it('sets up a remote called publishing', function() {
       utils.with_cwd(paths.get_blog_compiled(test_blog), function() {
         var command = 'git remote show';
-        var output = sh.exec(command).output;
-        // FIXME: this test is based on the hardcoded 'publishing' name
-        //        store in paths?
+        var output;
+        silence_stdout(function() {
+          output = sh.exec(command).output;
+        });
         assert(_.includes(output, 'publishing'));
       });
     });
@@ -71,18 +83,17 @@ describe('lyra', function() {
 
     beforeEach(function() {
       cleanup();
-
       sh.mkdir(test_blog);
       sh.mkdir(test_publishing);
 
       sh.cd(test_blog);
 
-      sh.exec('git init --bare ' + test_publishing);
+      silence_stdout(function() {
+        sh.exec('git init --bare ' + test_publishing);
 
-      lyra.init(paths, test_publishing);
-
-      lyra.publish(paths);
-      // FIXME: capture stdout when lyra runs (quiet down test output)
+        lyra.init(paths, test_publishing);
+        lyra.publish(paths);
+      });
     });
 
     afterEach(function() {
@@ -103,7 +114,10 @@ describe('lyra', function() {
 
       utils.with_cwd(paths.get_blog_compiled(test_blog), function() {
 
-        var git_status = sh.exec('git status');
+        var git_status;
+        silence_stdout(function() {
+          git_status = sh.exec('git status');
+        });
         assert.equal(git_status.code, 0);
         assert(_.includes(git_status.output, 'nothing to commit, working directory clean'));
 
@@ -114,7 +128,10 @@ describe('lyra', function() {
     it('pushes the compiled posts to the publishing remote', function() {
       utils.with_cwd(test_publishing, function() {
         var command = 'git --no-pager log';
-        var output = sh.exec(command).output;
+        var output;
+        silence_stdout(function() {
+          output = sh.exec(command).output;
+        });
         // FIXME: this test is based on the hardcoded 'update blog' string
         assert(_.includes(output, 'update blog'));
       });
