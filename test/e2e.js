@@ -57,10 +57,10 @@ describe('lyra', function() {
 
     it('inits a git repo in the compiled blog path', function() {
       utils.with_cwd(paths.get_blog_compiled(test_blog), function() {
-        var command = 'git status';
+        var cmd = 'git status';
         var exitcode;
         silence_stdout(function() {
-          exitcode = sh.exec(command).code;
+          exitcode = sh.exec(cmd).code;
         });
         assert.equal(exitcode, 0, 'git status exits normally (exitcode=0)');
       });
@@ -68,10 +68,10 @@ describe('lyra', function() {
 
     it('sets up a remote called publishing', function() {
       utils.with_cwd(paths.get_blog_compiled(test_blog), function() {
-        var command = 'git remote show';
+        var cmd = 'git remote show';
         var output;
         silence_stdout(function() {
-          output = sh.exec(command).output;
+          output = sh.exec(cmd).output;
         });
         assert(_.includes(output, 'publishing'));
       });
@@ -127,10 +127,10 @@ describe('lyra', function() {
 
     it('pushes the compiled posts to the publishing remote', function() {
       utils.with_cwd(test_publishing, function() {
-        var command = 'git --no-pager log';
+        var cmd = 'git --no-pager log';
         var output;
         silence_stdout(function() {
-          output = sh.exec(command).output;
+          output = sh.exec(cmd).output;
         });
         // FIXME: this test is based on the hardcoded 'update blog' string
         assert(_.includes(output, 'update blog'));
