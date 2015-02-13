@@ -8,6 +8,8 @@ var sh = require('shelljs');
 
 var path = require('path');
 
+var test_utils = require('./test_utils');
+
 var lyra = require('../src/lyra');
 var paths = require('../src/paths');
 var utils = require('../src/utils');
@@ -21,12 +23,7 @@ function cleanup() {
   sh.rm('-rf', test_publishing);
 }
 
-var silence_stdout = function(f) {
-  var old_write = process.stdout.write;
-  process.stdout.write = function(){};
-  f();
-  process.stdout.write = old_write;
-};
+
 
 describe('lyra', function() {
 
@@ -34,12 +31,12 @@ describe('lyra', function() {
 
     beforeEach(function() {
       cleanup();
+      test_utils.silence_stdout();
       sh.mkdir(test_blog);
       sh.cd(test_blog);
       var dummy_publishing_url = 'https://foo.org/blogus.git';
-      silence_stdout(function() {
-        lyra.init(paths, dummy_publishing_url);
-      });
+      lyra.init(paths, dummy_publishing_url);
+      test_utils.restore_stdout();
     });
 
     afterEach(function() {
@@ -56,25 +53,23 @@ describe('lyra', function() {
     });
 
     it('inits a git repo in the compiled blog path', function() {
+      test_utils.silence_stdout();
       utils.with_cwd(paths.get_blog_compiled(test_blog), function() {
         var cmd = 'git status';
-        var exitcode;
-        silence_stdout(function() {
-          exitcode = sh.exec(cmd).code;
-        });
+        var exitcode = sh.exec(cmd).code;
         assert.equal(exitcode, 0, 'git status exits normally (exitcode=0)');
       });
+      test_utils.restore_stdout();
     });
 
     it('sets up a remote called publishing', function() {
+      test_utils.silence_stdout();
       utils.with_cwd(paths.get_blog_compiled(test_blog), function() {
         var cmd = 'git remote show';
-        var output;
-        silence_stdout(function() {
-          output = sh.exec(cmd).output;
-        });
+        var output = sh.exec(cmd).output;
         assert(_.includes(output, 'publishing'), 'the publishing remote was added');
       });
+      test_utils.restore_stdout();
     });
 
   });
@@ -84,16 +79,17 @@ describe('lyra', function() {
     beforeEach(function() {
       this.timeout(4000); // .. harp is really slow
       cleanup();
+
+      test_utils.silence_stdout();
       sh.mkdir(test_blog);
       sh.mkdir(test_publishing);
 
       sh.cd(test_blog);
 
-      silence_stdout(function() {
-        sh.exec('git init --bare ' + test_publishing);
-        lyra.init(paths, test_publishing);
-        lyra.publish(paths);
-      });
+      sh.exec('git init --bare ' + test_publishing);
+      lyra.init(paths, test_publishing);
+      lyra.publish(paths);
+      test_utils.restore_stdout();
     });
 
     afterEach(function() {
@@ -111,29 +107,26 @@ describe('lyra', function() {
     });
 
     it('adds and commits everything in the compiled blog path', function() {
+      test_utils.silence_stdout();
       utils.with_cwd(paths.get_blog_compiled(test_blog), function() {
-        var git_status;
-        silence_stdout(function() {
-          git_status = sh.exec('git status');
-        });
+        var git_status = sh.exec('git status');
         assert.equal(git_status.code, 0);
         var wd_clean = _.includes(git_status.output, 'nothing to commit, working directory clean');
         assert(wd_clean, 'the working directory is clean');
       });
-
+      test_utils.restore_stdout();
     });
 
     it('pushes the compiled posts to the publishing remote', function() {
+      test_utils.silence_stdout();
       utils.with_cwd(test_publishing, function() {
         var cmd = 'git --no-pager log';
-        var output;
-        silence_stdout(function() {
-          output = sh.exec(cmd).output;
-        });
+        var output = sh.exec(cmd).output;
         // FIXME: this test is based on the hardcoded 'update blog' string
         var log_has_commit = _.includes(output, 'update blog');
         assert(log_has_commit, "git log contains the pushed commit");
       });
+      test_utils.restore_stdout();
     });
 
   });
