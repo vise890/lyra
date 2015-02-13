@@ -1,13 +1,13 @@
 var sh = require('shelljs');
 var colors = require('colors');
 
+var paths = require('./paths');
 var utils = require('./utils');
 var publishing = require('./publishing');
 var compiler = require('./compiler');
-
 module.exports = {
 
-  init: function(paths, publishing_url) {
+  init: function(publishing_url) {
 
     var blog_root = process.cwd();
     var src = paths.get_blog_src(blog_root);
@@ -26,7 +26,7 @@ module.exports = {
     sh.echo('==> Done.'.green);
   },
 
-  publish: function(paths) {
+  publish: function() {
 
     var blog_root = paths.get_blog_root(process.cwd());
     var src = paths.get_blog_src(blog_root);

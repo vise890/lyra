@@ -23,8 +23,6 @@ function cleanup() {
   sh.rm('-rf', test_publishing);
 }
 
-
-
 describe('lyra', function() {
 
   describe('#init()', function() {
@@ -35,7 +33,7 @@ describe('lyra', function() {
       sh.mkdir(test_blog);
       sh.cd(test_blog);
       var dummy_publishing_url = 'https://foo.org/blogus.git';
-      lyra.init(paths, dummy_publishing_url);
+      lyra.init(dummy_publishing_url);
       test_utils.restore_stdout();
     });
 
@@ -87,8 +85,8 @@ describe('lyra', function() {
       sh.cd(test_blog);
 
       sh.exec('git init --bare ' + test_publishing);
-      lyra.init(paths, test_publishing);
-      lyra.publish(paths);
+      lyra.init(test_publishing);
+      lyra.publish();
       test_utils.restore_stdout();
     });
 

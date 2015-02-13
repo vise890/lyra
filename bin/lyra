@@ -4,12 +4,11 @@ require('../src/prerequisites').check();
 
 var sh = require('shelljs');
 
-var paths = require('../src/paths');
 var lyra = require('../src/lyra');
 
-var lyra_command = process.argv[2];
-switch (lyra_command) {
-  case "init":
+var lyra_cli = {
+
+  init: function(){
     var argv = require('yargs')
       .describe('p',
         'The url of a git repo where you want to publish your blog')
@@ -18,19 +17,26 @@ switch (lyra_command) {
       .alias('p', 'publishing-url')
       .demand('p')
       .argv;
-    lyra.init(paths, argv['publishing-url']);
-    break;
-  case "publish":
-    lyra.publish(paths);
-    break;
-  case "server":
-    lyra.server(paths);
-    break;
-  default:
-    var lyra_usage = '==> Command not recognized\n' +
-      "Lyra's Usage:\n" +
-      '$ lyra init      # init a blog in the current directory\n' +
-      '$ lyra publish   # publish the blog to the provided remote\n' +
-      '$ lyra server    # start a local development server\n';
-    sh.echo(lyra_usage);
+    lyra.init(argv['publishing-url']);
+  },
+
+  publish: lyra.publish,
+
+  server: lyra.server
+
+};
+
+
+
+var lyra_command_name = process.argv[2];
+var lyra_command = lyra_cli[lyra_command_name];
+if (lyra_command === undefined) {
+  var lyra_usage = '==> Command not recognized\n' +
+    "Lyra's Usage:\n" +
+    '$ lyra init      # init a blog in the current directory\n' +
+    '$ lyra publish   # publish the blog to the provided remote\n' +
+    '$ lyra server    # start a local development server\n';
+  sh.echo(lyra_usage);
+} else {
+  lyra_command();
 }
