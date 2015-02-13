@@ -36,7 +36,7 @@ describe('paths', function() {
       expect(paths.get_blog_root).to.throw(Error);
     });
 
-    it('errors out if it cannot find a suitable lyra blog', function() {
+    it.skip('errors out if it cannot find a suitable lyra blog', function() {
       // TODO: 2 implement
     });
 
