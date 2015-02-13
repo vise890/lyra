@@ -13,8 +13,9 @@ function harp_compile(from, to) {
 
 
 module.exports = {
+
   compile: function(from, to) {
-    var tempdir = sh.tempdir() + 'lyra_compiled';
+    var tempdir = path.join(sh.tempdir(), 'lyra_compiled');
     sh.rm('-rf', tempdir);
     sh.mkdir(tempdir);
     console.log(tempdir);
@@ -25,6 +26,6 @@ module.exports = {
       sh.rm('-rf', '.git'); //omg
       sh.exec('cp -r ./* ' + to);
     });
-
   }
+
 };
