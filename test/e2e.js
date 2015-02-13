@@ -82,6 +82,7 @@ describe('lyra', function() {
   describe('#publish()', function() {
 
     beforeEach(function() {
+      this.timeout(4000); // .. harp is really slow
       cleanup();
       sh.mkdir(test_blog);
       sh.mkdir(test_publishing);
