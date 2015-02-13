@@ -11,7 +11,6 @@ function harp_compile(from, to) {
   var err = sh.exec(cmd);
 }
 
-
 module.exports = {
 
   compile: function(from, to) {
