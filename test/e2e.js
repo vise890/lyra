@@ -16,7 +16,7 @@ var test_blog = path.join(sh.tempdir(), 'test_lyra_blog');
 var test_publishing = path.join(sh.tempdir(), 'test_lyra_publishing');
 
 function cleanup() {
-  sh.cd('/tmp'); // ensure we're not in a dir that doesn't exist
+  sh.cd('/tmp'); // ensure we're in a dir that does exist
   sh.rm('-rf', test_blog);
   sh.rm('-rf', test_publishing);
 }
@@ -51,7 +51,7 @@ describe('lyra', function() {
       var copied_templates = sh.ls(paths.get_blog_src(test_blog));
 
       _.forEach(templates, function(t) {
-        assert(_.includes(copied_templates, t));
+        assert(_.includes(copied_templates, t), 'Template '+t+' was copied');
       });
     });
 
@@ -73,7 +73,7 @@ describe('lyra', function() {
         silence_stdout(function() {
           output = sh.exec(cmd).output;
         });
-        assert(_.includes(output, 'publishing'));
+        assert(_.includes(output, 'publishing'), 'the publishing remote was added');
       });
     });
 
@@ -91,7 +91,6 @@ describe('lyra', function() {
 
       silence_stdout(function() {
         sh.exec('git init --bare ' + test_publishing);
-
         lyra.init(paths, test_publishing);
         lyra.publish(paths);
       });
@@ -112,16 +111,14 @@ describe('lyra', function() {
     });
 
     it('adds and commits everything in the compiled blog path', function() {
-
       utils.with_cwd(paths.get_blog_compiled(test_blog), function() {
-
         var git_status;
         silence_stdout(function() {
           git_status = sh.exec('git status');
         });
         assert.equal(git_status.code, 0);
-        assert(_.includes(git_status.output, 'nothing to commit, working directory clean'));
-
+        var wd_clean = _.includes(git_status.output, 'nothing to commit, working directory clean');
+        assert(wd_clean, 'the working directory is clean');
       });
 
     });
@@ -134,7 +131,8 @@ describe('lyra', function() {
           output = sh.exec(cmd).output;
         });
         // FIXME: this test is based on the hardcoded 'update blog' string
-        assert(_.includes(output, 'update blog'));
+        var log_has_commit = _.includes(output, 'update blog');
+        assert(log_has_commit, "git log contains the pushed commit");
       });
     });
 
