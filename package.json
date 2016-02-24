@@ -20,12 +20,12 @@
   "homepage": "https://github.com/vise890/lyra",
   "dependencies": {
     "colors": "^1.0.3",
-    "harp": "^0.15.1",
-    "shelljs": "^0.3.0",
-    "yargs": "^3.0.2"
+    "harp": "^0.20.1",
+    "shelljs": "^0.6.0",
+    "yargs": "^4.1.0"
   },
   "devDependencies": {
-    "lodash": "^3.2.0",
+    "lodash": "^4.5.1",
     "chai": "*",
     "mocha": "*"
   }
