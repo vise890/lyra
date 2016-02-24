@@ -9,7 +9,7 @@ course (hence the name lyra).
 # Getting started
 
 ```bash
-$ npm install -g lyra
+$ npm install -g lyra harp
 $ mkdir ma-blog
 $ cd ma-blog
 
@@ -29,6 +29,7 @@ copy. GH is the easiest setup.
 # Testing
 
 ```bash
+$ npm install -g mocha
 $ mocha
 ```
 
